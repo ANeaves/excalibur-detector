@@ -17,6 +17,7 @@ using namespace log4cxx::helpers;
 
 
 #include "FrameProcessorPlugin.h"
+#include "FrameProcessorDefinitions.h"
 #include "ExcaliburDefinitions.h"
 #include "ClassLoader.h"
 
@@ -96,6 +97,7 @@ namespace FrameProcessor
     void reorder_24bit_stripe(unsigned short* in_c0, unsigned short* in_c1, unsigned int* out,
         bool stripe_is_even);
     std::size_t reordered_image_size(int asic_counter_depth_);
+    void set_data_type(boost::shared_ptr<Frame> frame, int asic_counter_depth);
 
     /** Pointer to logger **/
     LoggerPtr logger_;

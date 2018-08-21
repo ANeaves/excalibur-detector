@@ -347,6 +347,7 @@ namespace FrameProcessor
           data_frame->set_frame_number(hdr_ptr->frame_number);
         }
         data_frame->set_dimensions(dims);
+        set_data_type(frame, asic_counter_depth_);
         data_frame->copy_data(reordered_image, output_image_size);
 
         LOG4CXX_TRACE(logger_, "Pushing data frame.");
@@ -402,6 +403,37 @@ namespace FrameProcessor
 
     return slice_size;
 
+  }
+
+  /**
+   * Set the data type of the Frame based on the counter depth.
+   *
+   * \param[in] Pointer to Frame
+   * \param[in] asic_counter_depth
+   */
+  void ExcaliburProcessPlugin::set_data_type(boost::shared_ptr<Frame> frame,
+                                            int asic_counter_depth) {
+    switch (asic_counter_depth)
+    {
+      case DEPTH_1_BIT:
+      case DEPTH_6_BIT:
+        frame->set_data_type(raw_8bit);
+        break;
+
+      case DEPTH_12_BIT:
+        frame->set_data_type(raw_16bit);
+        break;
+
+      case DEPTH_24_BIT:
+        frame->set_data_type(raw_32bit);
+        break;
+
+      default:
+        std::stringstream msg;
+        msg << "Failed to match bit depth "  << asic_counter_depth <<" to a valid data type.";
+        this->set_error(msg.str());
+        throw std::runtime_error(msg.str());
+    }
   }
 
   /**
