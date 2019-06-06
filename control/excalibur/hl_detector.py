@@ -15,6 +15,7 @@ if is_py2:
     import Queue as queue
 else:
     import queue as queue
+    unicode = str
 
 from excalibur.detector import ExcaliburDetector, ExcaliburDetectorError
 from excalibur.detector_sim import ExcaliburSimulator
