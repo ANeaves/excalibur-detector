@@ -88,7 +88,7 @@ class ExcaliburAdapter(ApiAdapter):
         else:
             logging.warning('No detector FEM option specified in configuration')
 
-    @request_types('application/json')
+    @request_types('application/json', "application/vnd.odin-native")
     @response_types('application/json', default='application/json')
     @require_valid_detector
     def get(self, path, request):
@@ -100,6 +100,8 @@ class ExcaliburAdapter(ApiAdapter):
         :param request: Tornado HTTP request object
         :return: ApiAdapterResponse object to be returned to the client
         """
+        logging.debug("Excalibur 'get' adapter path: %s", path)
+        logging.debug("Excalibur 'get' adapter request.body: %s", request.body)
         try:
             response = self.detector.get(path)
             status_code = 200
@@ -110,7 +112,7 @@ class ExcaliburAdapter(ApiAdapter):
             
         return ApiAdapterResponse(response, status_code=status_code)
 
-    @request_types('application/json')
+    @request_types('application/json', "application/vnd.odin-native")
     @response_types('application/json', default='application/json')
     @require_valid_detector
     def put(self, path, request):
@@ -122,8 +124,8 @@ class ExcaliburAdapter(ApiAdapter):
         :param request: Tornado HTTP request object
         :return: ApiAdapterResponse object to be returned to the client
         """
-        logging.debug("%s", path)
-        logging.debug("%s", request.body)
+        logging.debug("Excalibur 'put' adapter path: %s", path)
+        logging.debug("Excalibur 'put' adapter request.body: %s", request.body)
         try:
             data = json_decode(request.body)
             self.detector.set(path, data)
