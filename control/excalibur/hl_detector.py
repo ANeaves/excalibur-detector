@@ -305,6 +305,7 @@ class HLExcaliburDetector(ExcaliburDetector):
         self._acquiring = False
         self._frames_acquired = 0
         self._hw_frames_acquired = 0
+        self._fem_frames_acquired = []
         self._acq_frame_count = 0
         self._acq_exposure = 0.0
         self._acq_start_time = datetime.now()
@@ -915,6 +916,7 @@ class HLExcaliburDetector(ExcaliburDetector):
                 if self._acquiring:
                     # Record the frames acquired
                     self._frames_acquired = frames_acquired
+                    self._fem_frames_acquired = vals['frames_acquired'][:]
                     # We are acquiring so check to see if we have the correct number of frames
                     if frames_acquired == self._acq_frame_count:
                         self._acquiring = False
@@ -962,7 +964,7 @@ class HLExcaliburDetector(ExcaliburDetector):
 
                 status = {'fem_state': init_state,
                           'frames_acquired': self._frames_acquired,
-                          'fem_frames': vals['frames_acquired'],
+                          'fem_frames': self._fem_frames_acquired,
                           'frame_rate': frame_rate,
                           'acquisition_complete': (not self._acquiring)}
             with self._param_lock:
